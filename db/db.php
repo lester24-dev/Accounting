@@ -531,7 +531,7 @@ if (isset($_POST['create_sales_forecast_staff'])) {
 	$stmt_admin_notif = $dbh->prepare($sql_admin_notif);
 	$stmt_admin_notif->execute($data_admin_notif);
 	
-	$url = '../staff/sale_forecast_create?rq_number='.$rq_number.'&transaction_id='.$transaction_id.'&year='.$year.'&data_number='.$_POST['data_number'].'&customer_id='.$_POST['customer_id'].'&title'.$title;
+	$url = '../staff/sale_forecast_create?rq_number='.$rq_number.'&transaction_id='.$transaction_id.'&year='.$year.'&data_number='.$_POST['data_number'].'&customer_id='.$_POST['customer_id'].'&title='.$title;
     header('Location:'.$url);
 }
 
