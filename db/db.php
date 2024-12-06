@@ -568,7 +568,7 @@ if (isset($_POST['create_request_forecast_staff'])) {
        foreach ($_POST['year'] as $key => $value) {
         // $timeSeriesData = array_map('floatval', explode(',', $_POST['data'][$key]));
           $forecastedData = movingAverageForecast($_POST['forecast_value'], $windowSize);
-            $year = date('Y', strtotime("+$key years"));
+            $year = $_POST['year'][$key] + 1;
 			$sum += $_POST['forecast_value'][$key];
             $dataToInsert = [
                 'date' => $_POST['year'][$key],
@@ -911,7 +911,7 @@ if (isset($_GET['update_transaction_cash_staff'])) {
     $transaction_id = $_GET['transaction_id'];
 
 
-	$sql_date = 'UPDATE `cash-flow-statement-data` SET customer_id= :customer_id, title= :title, year= :year WHERE transaction_id = :transaction_id';
+	$sql_date = 'UPDATE `cash-flow-statement` SET customer_id= :customer_id, title= :title, year= :year WHERE transaction_id = :transaction_id';
     $stmt = $dbh->prepare($sql_date);
 
 	$stmt->execute([
@@ -1337,6 +1337,46 @@ if (isset($_GET['update_sale_forecast_staff'])) {
 
 	echo '<script>alert("Update Success")</script>';
     echo '<script>window.location.href="../staff/cash-flow-statement"</script>';
+}
+
+if (isset($_GET['update_transaction_ledger_staff'])) {
+	$title = $_GET['title'];
+    $customer_id = $_GET['customer_id'];
+    $year = $_GET['year'];
+    $transaction_id = $_GET['transaction_id'];
+
+	$sql_date = 'UPDATE `ledger` SET customer_id= :customer_id, title= :title, year= :year WHERE transaction_id = :transaction_id';
+    $stmt = $dbh->prepare($sql_date);
+
+	$stmt->execute([
+         'title'    => $title,
+        'customer_id'  =>  $customer_id,
+        'year'  =>  $year,
+		'transaction_id' => $transaction_id
+    ]);
+
+	echo '<script>alert("Update Success")</script>';
+    echo '<script>window.location.href="../staff/ledger"</script>';
+}
+
+if (isset($_GET['update_transaction_trial_staff'])) {
+	$title = $_GET['title'];
+    $customer_id = $_GET['customer_id'];
+    $year = $_GET['year'];
+    $transaction_id = $_GET['transaction_id'];
+
+	$sql_date = 'UPDATE `trial` SET customer_id= :customer_id, title= :title, year= :year WHERE transaction_id = :transaction_id';
+    $stmt = $dbh->prepare($sql_date);
+
+	$stmt->execute([
+         'title'    => $title,
+        'customer_id'  =>  $customer_id,
+        'year'  =>  $year,
+		'transaction_id' => $transaction_id
+    ]);
+
+	echo '<script>alert("Update Success")</script>';
+    echo '<script>window.location.href="../staff/trial"</script>';
 }
 
 ?>
