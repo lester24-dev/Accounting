@@ -1319,5 +1319,24 @@ if (isset($_GET['update_status_cash'])) {
     header('Location:'.$url);
 }
 
+if (isset($_GET['update_sale_forecast_staff'])) {
+	$title = $_GET['title'];
+    $customer_id = $_GET['customer_id'];
+    $year = $_GET['year'];
+    $transaction_id = $_GET['transaction_id'];
+
+	$sql_date = 'UPDATE `cash-flow-statement` SET customer_id= :customer_id, title= :title, year= :year WHERE transaction_id = :transaction_id';
+    $stmt = $dbh->prepare($sql_date);
+
+	$stmt->execute([
+         'title'    => $title,
+        'customer_id'  =>  $customer_id,
+        'year'  =>  $year,
+		'transaction_id' => $transaction_id
+    ]);
+
+	echo '<script>alert("Update Success")</script>';
+    echo '<script>window.location.href="../staff/cash-flow-statement"</script>';
+}
 
 ?>

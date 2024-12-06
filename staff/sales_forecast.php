@@ -56,7 +56,7 @@ error_reporting(0);
                                         </button>
                                       </div>
                                       <div class="modal-body">
-                                        <form action="../db/firebaseDB" method="GET" enctype="multipart/form-data">
+                                        <form action="../db/db" method="GET" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <input type="text" class="form-control" id="title" name="title"  value="<?php echo $fetch['title'];?>" placeholder="Journal Title">
                                             <input type="hidden" name="staff_id" value="<?php echo $_SESSION['id']?>">
