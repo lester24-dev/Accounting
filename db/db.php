@@ -596,12 +596,14 @@ if (isset($_POST['create_ewt'])) {
     $tax_rate = $_POST['tax_rate'];
     $ind = $_POST['ind'];
     $corp = $_POST['corp'];
+	$total_percentage_corp = $_POST['corp'] / 100;
+	$total_percentage_ind = $_POST['ind'] / 100;
 
     $data = [
         "title" => $title,
         "tax_rate"     => $tax_rate,
-        "ind"     => "0.".$ind,
-        "corp"     => "0.".$corp
+        "ind"     => $total_percentage_ind,
+        "corp"     => $total_percentage_corp
 
     ];
 
