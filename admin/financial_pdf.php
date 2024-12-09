@@ -16,7 +16,7 @@
                               // Loop through the items to find the one with the matching name
 foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $itemKey => $item) {
 
-    $userRef = $dbh->query("SELECT * FROM users WHERE id = '".$item['department_id']."'");
+    $userRef = $dbh->query("SELECT * FROM users WHERE id = '".$item['customer_id']."'");
     $row_depts = $userRef->fetch(PDO::FETCH_ASSOC);
             
         $pdf->Cell(70,10,$item['title'],1,0,'C',0);
