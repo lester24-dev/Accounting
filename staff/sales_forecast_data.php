@@ -40,19 +40,9 @@ include('../layout/nav_header.php');
                     const forecastValues = data.map(item => item.forecast_value);
 
                     labels = data.map(item => item.seriesName); // Use one set of labels for all
-
-                    // Add datasets for original and forecasted data
+                  
                     datasets.push({
-                        label: `${seriesName} - Original`,
-                        data: originalValues,
-                        borderColor: getRandomColor(),
-                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
-                        fill: true,
-                        tension: 0.3,
-                    });
-
-                    datasets.push({
-                        label: `${seriesName} - Forecast`,
+                        label: `${seriesData} - Forecast`,
                         data: forecastValues,
                         borderColor: getRandomColor(),
                         backgroundColor: 'rgba(255, 0, 0, 0.1)',

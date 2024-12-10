@@ -1,5 +1,5 @@
 <?php
- require_once '../fpdf/fpdf.php';
+ require_once '../tcpdf/tcpdf.php';
  require_once '../db/db.php';
 
 
@@ -10,6 +10,11 @@
  $balance_assets = 0;
  $balance_liabilities = 0;
  $balance_equity = 0;
+ $total_balance_liabilities = 0;
+ $total_balance_equity = 0;
+ $assets = 0;
+ $cleaned_balance_liabilities = 0;
+ $cleaned_balance_equity = 0;
 
  $itemsRef_assets = $dbh->query("SELECT * FROM `account` WHERE account_type = 'Assets'");
                     foreach ($itemsRef_assets->fetchAll(PDO::FETCH_ASSOC) as $value) {
@@ -32,167 +37,258 @@
                       
                     }
  
- $pdf = new FPDF();
- $pdf->AddPage();
- $pdf->SetFont('Arial','I',9);
- $pdf->Cell(95,10,'Assets',1,0,'C',0);
- $pdf->Cell(95,10,'Total',1,0,'C',0);
- $pdf->Ln();
+$pdf = new TCPDF();
+$pdf->SetFont('helvetica', '', 12);
+$pdf->AddPage(); 
+$pdf->Ln(20); // Line break
 
- 
- $AssetsgroupedEntries = [];
- $assets_itemsRef = $dbh->query("SELECT * FROM `trial-data`");
+$userRef = $dbh->query("SELECT * FROM users WHERE id = '".$_GET['id']."'");
+$row_dept = $userRef->fetch(PDO::FETCH_ASSOC);
 
- foreach ($assets_itemsRef->fetchAll(PDO::FETCH_ASSOC) as $item) {
-     if ($item['transaction_id'] == $_GET['transaction_id']) {
-         $account_name = $item['account_name'];
-             if (!isset($AssetsgroupedEntries[$account_name])) {
-                 $AssetsgroupedEntries[$account_name][] = [];
-                 
- }
-     $AssetsgroupedEntries[$account_name][] = $item;
- }}
-
- foreach ($AssetsgroupedEntries as $account_name => $account) {
-   $filteredArray = array_filter($account);
-   if (in_array($account_name, $array_assets)) {
-
-    $pdf->Cell(95,10,$account_name,1,0,'C',0);
-
-    $amount_debit = 0; $amount_credit = 0;
-
-    foreach ($filteredArray as $item) {
-    if ($item['type'] == 'debit') {
-        $amount_debit += $item['account_price'];
-    }
-    elseif ($item['type'] == 'credit') {
-        $amount_credit += $item['account_price'];
-    }
-
-    }
-    $balance_assets = 0;
-    $balance_assets = intval($amount_debit - $amount_credit);
-    $characters = array(',', ' ', '-');
-    $cleaned_number_assets = str_replace($characters, '', $balance_assets);
-    $pdf->Cell(95,10,htmlspecialchars(number_format($cleaned_number_assets, 2)),1,0,'C',0);
-    $pdf->Ln();
-
-    $total_balance_assets = 0;
-    $total_balance_assets += $balance_assets;
-    $pdf->Cell(95,10,'Total Assets',1,0,'C',0);
-    $characters = array(',', ' ', '-');
-    $cleaned_number_total_assets = str_replace($characters, '', $total_balance_assets);
-    $pdf->Cell(95,10,htmlspecialchars(number_format($cleaned_number_total_assets, 2)),1,0,'C',0);
-    $pdf->Ln();
-   }
-  }
- 
-  $pdf->Cell(95,10,'Liabilities',1,0,'C',0);
-  $pdf->Cell(95,10,'Total',1,0,'C',0);
-  $pdf->Ln();
+$html = '
+ <h4>Balance Sheet</h4>
+    <h4>'.$row_dept['name'].'</h4> 
+    <table class="table" id="request" cellspacing="0" cellpadding="4">
+';
 
 
-  $LiabilitiesgroupedEntries = [];
-  $liabilities_itemsRef = $dbh->query("SELECT * FROM `trial-data`");
+$html .= '
+  <thead>
+                        <tr style="border: 1px solid black;">
+                          <th style="border: 1px solid black;background-color:green;color:white;">Assets</th>
+                          <th style="border: 1px solid black;background-color:green;color:white;">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+';
 
-  foreach ($liabilities_itemsRef->fetchAll(PDO::FETCH_ASSOC) as $item) {
-    if ($item['transaction_id'] == $_GET['transaction_id']) {
-        $account_name = $item['account_name'];
-            if (!isset($LiabilitiesgroupedEntries[$account_name])) {
-                $LiabilitiesgroupedEntries[$account_name][] = [];
-                
-}
-    $LiabilitiesgroupedEntries[$account_name][] = $item;
-}}
-
-
-  foreach ($LiabilitiesgroupedEntries as $account_name => $account) {
-   $filteredArray = array_filter($account);
-   if (in_array($account_name, $array_liabilities)) {
-
-    $pdf->Cell(95,10,$account_name,1,0,'C',0);
-
-    $amount_debit = 0; $amount_credit = 0;
-
-    foreach ($filteredArray as $item) {
-    if ($item['type'] == 'debit') {
-        $amount_debit += $item['account_price'];
-    }
-    elseif ($item['type'] == 'credit') {
-        $amount_credit += $item['account_price'];
-    }
-
-    }
-
-    $balance_liabilities = intval($amount_debit - $amount_credit);
-    $characters = array(',', ' ', '-');
-    $cleaned_number_liabilities = str_replace($characters, '', $balance_liabilities); 
-    $pdf->Cell(95,10,htmlspecialchars(number_format($cleaned_number_liabilities, 2)),1,0,'C',0);
-    $pdf->Ln();
-
-    $total_balance_liabilities = 0;
-    $total_balance_liabilities += $balance_liabilities;
-    $pdf->Cell(95,10,'Total Liabilities',1,0,'C',0);
-    $characters = array(',', ' ', '-');
-    $cleaned_number_total_liabilities = str_replace($characters, '', $total_balance_liabilities); 
-    $pdf->Cell(95,10,htmlspecialchars(number_format($cleaned_number_total_liabilities, 2)),1,0,'C',0);
-    $pdf->Ln();
-
-   }
-  }
-
-  $pdf->Cell(95,10,'Equity',1,0,'C',0);
-  $pdf->Cell(95,10,'Total',1,0,'C',0);
-
-  $EquitygroupedEntries = [];
-  $equity_itemsRef = $dbh->query("SELECT * FROM `trial-data`");
-
-  foreach ($equity_itemsRef->fetchAll(PDO::FETCH_ASSOC) as $item) {
-    if ($item['transaction_id'] == $_GET['transaction_id']) {
-        $account_name = $item['account_name'];
-            if (!isset($EquitygroupedEntries[$account_name])) {
-                $EquitygroupedEntries[$account_name][] = [];
-                
-}
-    $EquitygroupedEntries[$account_name][] = $item;
-}}
+$trailgroupedEntries = [];
+                             $trial_itemsRef = $dbh->query("SELECT * FROM `trial-data`");
+                             // Array to track unique entries
+         
+                             foreach ($trial_itemsRef->fetchAll(PDO::FETCH_ASSOC) as $item) {
+                                 if ($item['transaction_id'] == $_GET['transaction_id']) {
+                                     $account_name = $item['account_name'];
+                                         if (!isset($trailgroupedEntries[$account_name])) {
+                                             $trailgroupedEntries[$account_name][] = [];
+                                             
+                             }
+                                 $trailgroupedEntries[$account_name][] = $item;
+                             }}
+     
+                             foreach ($trailgroupedEntries as $account_name => $account) {
+                               $filteredArray = array_filter($account);
+                               if (in_array($account_name, $array_assets)) {
 
 
-  foreach ($EquitygroupedEntries as $account_name => $account) {
-    $filteredArray = array_filter($account);
-    if (in_array($account_name, $array_equity)) {
-  
+                                $html .= '
+                                <tr style="border: 1px solid black;background-color:#f2f2f2;">
+                                <td style="border: 1px solid black;background-color:#f2f2f2;">'. $account_name.'</td>
+                                ';
 
-      $pdf->Cell(95,10,$account_name,1,0,'C',0);
+                                $amount_debit = 0; $amount_credit = 0;
 
-      $amount_debit = 0; $amount_credit = 0;
-  
-      foreach ($filteredArray as $item) {
-      if ($item['type'] == 'debit') {
-          $amount_debit += $item['account_price'];
-      }
-      elseif ($item['type'] == 'credit') {
-          $amount_credit += $item['account_price'];
-      }
-  
-      }
-      $balance_equity = 0;
-      $balance_equity = intval($amount_debit - $amount_credit);
-      $characters = array(',', ' ', '-');
-      $cleaned_number_equity = str_replace($characters, '', $balance_equity); 
-      $pdf->Cell(95,10,htmlspecialchars(number_format($cleaned_number_equity, 2)),1,0,'C',0);
-      $pdf->Ln();
-  
-      $total_balance_equity = 0;
-      $total_balance_equity += $balance_equity;
-      $pdf->Cell(95,10,'Total Equity',1,0,'C',0);
-      $characters = array(',', ' ', '-');
-      $cleaned_number_total_equity = str_replace($characters, '', $total_balance_equity); 
-      $pdf->Cell(95,10,htmlspecialchars(number_format($cleaned_number_total_equity, 2)),1,0,'C',0);
-      $pdf->Ln();
+                                foreach ($filteredArray as $item) {
+                                if ($item['type'] == 'debit') {
+                                    $amount_debit += $item['account_price'];
+                                }
+                                elseif ($item['type'] == 'credit') {
+                                    $amount_credit += $item['account_price'];
+                                }
 
-    }};
+                                }
+                                
+                                $balance_assets = intval($amount_debit - $amount_credit);
+                                $characters = array(',', ' ', '-');
+                                $cleaned_number_assets = str_replace($characters, '', $balance_assets); 
+                                $html .= '<td style="border: 1px solid black;background-color:#f2f2f2;">'.htmlspecialchars(number_format($cleaned_number_assets, 2)).'</td>';
 
-  $pdf->Output('Income_Statement.pdf','D', true);
+                                $html .= '</tr>';
+                                $total_balance_assets = 0;
+                                $total_balance_assets += $balance_assets;
+                                $characters = array(',', ' ', '-');
+                                $cleaned_number_total_assets = '';
+                                $cleaned_number_total_assets = str_replace($characters, '', $total_balance_assets); 
+ }}                         
+
+ $html .= '
+  <tr>
+    <td style="border: 1px solid black;background-color:#f2f2f2;color:black;">Total Assets</td>
+    <td style="border: 1px solid black;background-color:#f2f2f2;color:black;">'.htmlspecialchars(number_format($cleaned_number_total_assets, 2)).'</td>
+  </tr>  
+   </tbody>
+ ';
+
+$html .= '</table>';
+
+
+
+$html .= '
+    <table class="table" id="request" cellspacing="0" cellpadding="4">
+
+  <thead>
+                        <tr style="border: 1px solid black;">
+                          <th style="border: 1px solid black;background-color:green;color:white;">Liabilities</th>
+                          <th style="border: 1px solid black;background-color:green;color:white;">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+';
+
+$trailgroupedEntries = [];
+                             $trial_itemsRef = $dbh->query("SELECT * FROM `trial-data`");
+                             // Array to track unique entries
+         
+                             foreach ($trial_itemsRef->fetchAll(PDO::FETCH_ASSOC) as $item) {
+                                 if ($item['transaction_id'] == $_GET['transaction_id']) {
+                                     $account_name = $item['account_name'];
+                                         if (!isset($trailgroupedEntries[$account_name])) {
+                                             $trailgroupedEntries[$account_name][] = [];
+                                             
+                             }
+                                 $trailgroupedEntries[$account_name][] = $item;
+                             }}
+     
+                             foreach ($trailgroupedEntries as $account_name => $account) {
+                               $filteredArray = array_filter($account);
+                               if (in_array($account_name, $array_liabilities)) {
+
+
+                                $html .= '
+                                <tr style="border: 1px solid black;background-color:#f2f2f2;">
+                                <td style="border: 1px solid black;background-color:#f2f2f2;">'. $account_name.'</td>
+                                ';
+
+                                $amount_debit = 0; $amount_credit = 0;
+
+                                foreach ($filteredArray as $item) {
+                                if ($item['type'] == 'debit') {
+                                    $amount_debit += $item['account_price'];
+                                }
+                                elseif ($item['type'] == 'credit') {
+                                    $amount_credit += $item['account_price'];
+                                }
+
+                                }
+                                
+                                $balance_liabilities = intval($amount_debit - $amount_credit);
+                                $characters = array(',', ' ', '-');
+                                $cleaned_number_liabilities = str_replace($characters, '', $balance_liabilities); 
+                                $html .= '<td style="border: 1px solid black;background-color:#f2f2f2;">'.htmlspecialchars(number_format($cleaned_number_liabilities, 2)).'</td>';
+
+                                $html .= '</tr>';
+
+                                $total_balance_liabilities += $balance_liabilities;
+                                $characters = array(',', ' ', '-');
+                                $cleaned_number_total_liabilities = str_replace($characters, '', $total_balance_liabilities); 
+                                $cleaned_number_total_liabilities = str_replace($characters, '', $total_balance_liabilities);
+
+ }}                         
+
+ $html .= '
+  <tr>
+    <td style="border: 1px solid black;background-color:#f2f2f2;color:black;">Total Liabilities</td>
+    <td style="border: 1px solid black;background-color:#f2f2f2;color:black;">'.htmlspecialchars(number_format($cleaned_number_total_liabilities, 2)).'</td>
+  </tr>  
+   </tbody>
+ ';
+
+$html .= '</table>';
+
+
+$html .= '
+    <table class="table" id="request" cellspacing="0" cellpadding="4">
+
+  <thead>
+                        <tr style="border: 1px solid black;">
+                          <th style="border: 1px solid black;background-color:green;color:white;">Equity</th>
+                          <th style="border: 1px solid black;background-color:green;color:white;">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+';
+
+$trailgroupedEntries = [];
+                             $trial_itemsRef = $dbh->query("SELECT * FROM `trial-data`");
+                             // Array to track unique entries
+         
+                             foreach ($trial_itemsRef->fetchAll(PDO::FETCH_ASSOC) as $item) {
+                                 if ($item['transaction_id'] == $_GET['transaction_id']) {
+                                     $account_name = $item['account_name'];
+                                         if (!isset($trailgroupedEntries[$account_name])) {
+                                             $trailgroupedEntries[$account_name][] = [];
+                                             
+                             }
+                                 $trailgroupedEntries[$account_name][] = $item;
+                             }}
+     
+                             foreach ($trailgroupedEntries as $account_name => $account) {
+                               $filteredArray = array_filter($account);
+                               if (in_array($account_name, $array_equity)) {
+
+
+                                $html .= '
+                                <tr style="border: 1px solid black;background-color:#f2f2f2;">
+                                <td style="border: 1px solid black;background-color:#f2f2f2;">'. $account_name.'</td>
+                                ';
+
+                                $amount_debit = 0; $amount_credit = 0;
+
+                                foreach ($filteredArray as $item) {
+                                if ($item['type'] == 'debit') {
+                                    $amount_debit += $item['account_price'];
+                                }
+                                elseif ($item['type'] == 'credit') {
+                                    $amount_credit += $item['account_price'];
+                                }
+
+                                }
+                                
+                                $balance_equity = intval($amount_debit - $amount_credit);
+                                $characters = array(',', ' ', '-');
+                                $cleaned_number_equity = str_replace($characters, '', $balance_equity); 
+                                $html .= '<td style="border: 1px solid black;background-color:#f2f2f2;">'.htmlspecialchars(number_format($cleaned_number_equity, 2)).'</td>';
+
+                                $html .= '</tr>';
+
+                                $total_balance_equity += $balance_equity;
+                                $characters = array(',', ' ', '-');
+                                $cleaned_number_total_equity = str_replace($characters, '', $total_balance_equity); 
+                                $cleaned_number_total_equity = str_replace($characters, '', $total_balance_equity);
+
+ }}                         
+
+ $html .= '
+  <tr>
+    <td style="border: 1px solid black;background-color:#f2f2f2;color:black;">Total Equity</td>
+    <td style="border: 1px solid black;background-color:#f2f2f2;color:black;">'.htmlspecialchars(number_format($cleaned_number_total_equity, 2)).'</td>
+  </tr>  
+   </tbody>
+ ';
+
+$html .= '</table>';
+
+$assets = $cleaned_number_total_liabilities + $cleaned_number_total_equity ;
+$html .= '
+    <table class="table" id="request" cellspacing="0" cellpadding="4">
+       <thead>
+                        <tr>
+                          <th style="border: 1px solid black;background-color:green;color:white;">Computation</th>
+                          <th style="border: 1px solid black;background-color:green;color:white;">Assets</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+      <tr>
+    <td style="border: 1px solid black;background-color:#f2f2f2;color:black;">'.$cleaned_number_total_liabilities.' + '.$cleaned_number_total_equity.'</td>
+    <td style="border: 1px solid black;background-color:#f2f2f2;color:black;">'.htmlspecialchars(number_format($assets, 2)).'</td>
+    </tr>  
+    </tbody>
+    ';
+  $html .= '</table>';
+   
+$pdf->writeHTML($html, true, false, false, false, '');
+
+  $pdf->Output('Balance _Sheet.pdf','I');
 
 ?>

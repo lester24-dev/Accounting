@@ -18,6 +18,7 @@ include('../layout/admin_nav_header.php');
                         <tr>
                           <th>Tax Name</th>
                           <th>Tax Percentage</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -29,10 +30,40 @@ include('../layout/admin_nav_header.php');
                         <tr>
                           <td><?php echo $fetch['title']; ?></td>
                           <td><?php echo $fetch['tax_rate']. "%" ;?></td>
-                          
+                          <td><a type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateeModal<?php echo $fetch['id']; ?>">View</a>
+                          </td>
                         </tr>
 
-                        
+                        <div class="modal fade" id="updateeModal<?php echo $fetch['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Update Tax</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <form action="../db/db" method="POST" enctype="multipart/form-data">
+                              <div class="form-group">
+                                  <input type="number" class="form-control" id="ind" value="<?php echo $fetch['ind']; ?>" name="tax_name" placeholder="Tax Name" required>
+                                  <input type="hidden" name="tax_id" id="tax_id" value="<?php echo $fetch['id']; ?>">
+                              </div>
+
+                              <div class="form-group">
+                                    <input type="text" class="form-control" id="corp" name="corp" value="<?php echo $fetch['corp'];?>" placeholder="Tax Percentage" required>
+                              </div>
+
+                              </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-success" name="update_ewt">Create</button>
+                            </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+
 
                       
                      <?php   }?>

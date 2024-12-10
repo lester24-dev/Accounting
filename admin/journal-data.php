@@ -15,7 +15,7 @@ error_reporting(0);
                     ?>
                     <h4 class="card-title">Name: <?php echo $row_depts['name'] ?></h4>
                     <h4 class="card-title">Journal Entries</h4>
-                  <a href="journal_data_pdf?transaction_id=<?php echo $_GET['transaction_id']; ?>" class="btn btn-danger">PDF</a>
+                  <a href="journal_data_pdf?transaction_id=<?php echo $_GET['transaction_id']; ?>&id=<?php echo $_GET['customer_id'] ?>" class="btn btn-danger">PDF</a>
                   </p>
                   <div class="table-responsive">
                     <table class="table" id="request" cellspacing="0">
@@ -65,7 +65,7 @@ error_reporting(0);
                             <?php
                             foreach ($filteredArray as $item) {
                                 ?>
-                            <?php echo '&#8369;'.htmlspecialchars(number_format($item['amount_debit'], 2)); ?> <br> <br>
+                            <?php echo htmlspecialchars(number_format($item['amount_debit'], 2)); ?> <br> <br>
                             <?php }
                         ?>
                         </td>
@@ -81,7 +81,7 @@ error_reporting(0);
                             <?php
                             foreach ($filteredArray as $item) {
                                 ?>
-                            <?php echo '&#8369;'.htmlspecialchars(number_format($item['amount_credit'], 2)); ?> <br> <br>
+                            <?php echo htmlspecialchars(number_format($item['amount_credit'], 2)); ?> <br> <br>
                             <?php }
                         ?>
                         </td>
@@ -156,6 +156,9 @@ error_reporting(0);
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+ <script src="../src/tableHTMLExport.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {

@@ -16,7 +16,7 @@ error_reporting(0);
                     <h4 class="card-title">Name: <?php echo $row_depts['name'] ?></h4>
                     <h4 class="card-title">Cash Flow Statement</h4>
                   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#AddModal">Add +</button>
-                  <a href="cash_flow_statement_data_pdf?transaction_id=<?php echo $_GET['transaction_id'] ?>" class="btn btn-danger">PDF</a>
+                  <a href="cash_flow_statement_data_pdf?transaction_id=<?php echo $_GET['transaction_id'] ?>&id=<?php echo $_GET['customer_id']  ?>" class="btn btn-danger">PDF</a>
                   </p>
                   <div class="table-responsive">
                     <table class="table" id="request" cellspacing="0">

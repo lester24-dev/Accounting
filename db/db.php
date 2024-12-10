@@ -355,10 +355,22 @@ if (isset($_POST['create_request_journal_staff'])) {
             $cleaned_number_amount_debit = str_replace($characters, '', $amount_debit);
             $cleaned_number_amount_credit = str_replace($characters, '', $amount_credit);
 
+			if ($account_debit == ' N/A') {
+				$real_account_debit = '';
+			}else {
+				$real_account_debit = $account_debit;
+			}
+
+			if ($account_credit == ' N/A') {
+				$real_account_credit = '';
+			}else {
+				$real_account_credit = $account_credit;
+			}
+
 
             $data = [   
-                'account_debit' => $account_debit,
-                'account_credit' => $account_credit,
+                'account_debit' => $real_account_debit,
+                'account_credit' => $real_account_credit,
                 'transaction_id'   => $transaction_id,
                 'date'     => date('M d, Y', strtotime($date)),
                 'amount_debit'   => $cleaned_number_amount_debit,
@@ -368,7 +380,7 @@ if (isset($_POST['create_request_journal_staff'])) {
 
 
                 $data_trial = [   
-                    'account_name' => $account_debit,
+                    'account_name' => $real_account_debit,
                     'transaction_id'   => $transaction_id,
                     'date'     => date('M d, Y', strtotime($date)),
                     'account_price'   => $cleaned_number_amount_debit,
@@ -407,8 +419,9 @@ if (isset($_POST['create_request_journal_staff'])) {
 					// ];
 	
 					// $total_amount_etw_credit2 = $cleaned_number_amount_debit - $total_amount_etw_credit;
+
 					$data2 = [
-						'account_debit' => 'N/A',
+						'account_debit' => '',
 						'account_credit' => 'Expanded Withholding Tax',
 						'transaction_id'   => $transaction_id,
 						'date'     => date('M d, Y', strtotime($date)),
@@ -454,8 +467,14 @@ if (isset($_POST['create_request_journal_staff'])) {
             $characters = array(',', ' ');
             $cleaned_number_amount_credit = str_replace($characters, '', $amount_credit);
 
+			if ($account_credit == ' N/A') {
+				$real_account_credit = '';
+			}else {
+				$real_account_credit = $account_credit;
+			}
+
             $data_trial1 = [   
-                'account_name' => $account_credit,
+                'account_name' => $real_account_credit,
                 'transaction_id'   => $transaction_id,
                 'date'     => date('M d, Y', strtotime($date)),
                 'account_price'   => $cleaned_number_amount_credit,
@@ -567,14 +586,24 @@ if (isset($_POST['create_request_forecast_staff'])) {
 
        foreach ($_POST['year'] as $key => $value) {
         // $timeSeriesData = array_map('floatval', explode(',', $_POST['data'][$key]));
-          $forecastedData = movingAverageForecast($_POST['forecast_value'], $windowSize);
+        //   $forecastedData = movingAverageForecast($_POST['forecast_value'], $windowSize);
             $year = $_POST['year'][$key] + 1;
-			$sum += $_POST['forecast_value'][$key];
+			// $sum += $_POST['forecast_value'][$key];
+			$starting_value = $_POST['forecast_value'][0];
+			$ending_value = end($_POST['forecast_value']);
+			$years = $_POST['year'][$key] - 1;
+			$agr = pow($ending_value / $starting_value, 1 / $years) - 1;
+			// Predict future sales for 5 years
+			$current_sales = end($_POST['forecast_value']);
+			$future_years = 5;
+			$future_sales += $current_sales * pow(1 + $agr, $future_years);
+
+
             $dataToInsert = [
                 'date' => $_POST['year'][$key],
                 'seriesName' => $year,
                 'original_value' => $_POST['forecast_value'][$key],
-                'forecast_value' =>  $sum / $windowSize,
+                'forecast_value' =>  round($future_sales, 2),
 				'transaction_id' => $_GET['transaction_id']
             ];
 
@@ -1008,9 +1037,21 @@ if (isset($_POST['create_request_number_journal_staff'])) {
         $cleaned_number_debit = str_replace($characters, '', $amount_debit);
         $cleaned_number_credit = str_replace($characters, '', $amount_credit);
 
+		if ($account_debit == ' N/A') {
+			$real_account_debit = '';
+		}else {
+			$real_account_debit = $account_debit;
+		}
+
+		if ($account_credit == ' N/A') {
+			$real_account_credit = '';
+		}else {
+			$real_account_credit = $account_credit;
+		}
+
         $data = [   
-            'account_debit' => $account_debit,
-            'account_credit' => $account_credit,
+            'account_debit' => $real_account_debit,
+            'account_credit' => $real_account_credit,
             'transaction_id'   => $transaction_id,
             'date'     => date('M d, Y', strtotime($date)),
             'amount_debit'   => $cleaned_number_debit,
@@ -1020,7 +1061,7 @@ if (isset($_POST['create_request_number_journal_staff'])) {
 
 
             $data_trial = [   
-                'account_name' => $account_debit,
+                'account_name' => $real_account_debit,
                 'transaction_id'   => $transaction_id,
                 'date'     => date('M d, Y', strtotime($date)),
                 'account_price'   => $cleaned_number_debit,
@@ -1029,7 +1070,7 @@ if (isset($_POST['create_request_number_journal_staff'])) {
             ];
 
 			$data_trial2 = [   
-                'account_name' => $account_credit,
+                'account_name' => $real_account_credit,
                 'transaction_id'   => $transaction_id,
                 'date'     => date('M d, Y', strtotime($date)),
                 'account_price'   => $cleaned_number_credit,
@@ -1072,7 +1113,7 @@ if (isset($_POST['create_request_number_journal_staff'])) {
 
                 // $total_amount_etw_credit2 = $cleaned_number_debit - $total_amount_etw_credit;
                 $data2 = [
-                    'account_debit' => 'N/A',
+                    'account_debit' => '',
                     'account_credit' => 'Expanded Withholding Tax',
                     'transaction_id'   => $transaction_id,
                     'date'     => date('M d, Y', strtotime($date)),

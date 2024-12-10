@@ -1,88 +1,101 @@
 <?php
- require_once '../fpdf/fpdfs.php';
- require_once '../db/firebaseDB.php';
+ require_once '../tcpdf/tcpdf.php';
+ require_once '../db/db.php';
 
- $pdf = new FPDF();
- $pdf->addPage('L');
- $pdf->SetFont('Arial','I',9);
- $pdf->Cell(45,10,'Date',1,0,'C',0);
- $pdf->Cell(50,10,'Operating Activities',1,0,'C',0);
- $pdf->Cell(30,10,'Cost',1,0,'C',0);
- $pdf->Cell(50,10,'Investing Activities',1,0,'C',0);
- $pdf->Cell(30,10,'Cost',1,0,'C',0);
- $pdf->Cell(50,10,'Financing Activities',1,0,'C',0);
- $pdf->Cell(30,10,'Cost',1,0,'C',0);
- $pdf->Ln();
 
- $itemsRef = $realtimeDatabase->getReference('cash-flow-statement-data')->orderByChild('date');
- // Get the current items
- $itemRefs = $itemsRef->getValue();
- $groupedEntries = [];
- 
- foreach ($itemRefs as $item) {
-     if ($item['transaction_id'] === $_GET['transaction_id']) {
-         $date = $item['date'];
-             if (!isset($groupedEntries[$date])) {
-                 $groupedEntries[$date][] = [];
-                 
- }
-     $groupedEntries[$date][] = $item;
- }}
+ $pdf = new TCPDF();
+// Set font
+$pdf->SetFont('helvetica', '', 12);
+// Add a page to the PDF
+$pdf->AddPage(); 
+$pdf->Ln(20); // Line break
 
-// Loop through the items to find the one with the matching name
+$operating_activities_amount = 0;
+$investing_activities_amount = 0;
+$financing_activities_amount = 0;
+$total_cash_flow = 0;
+
+$userRef = $dbh->query("SELECT * FROM users WHERE id = '".$_GET['id']."'");
+$row_dept = $userRef->fetch(PDO::FETCH_ASSOC);
+
+$stmt = $dbh->query("SELECT * FROM `cash-flow-statement-data`");
+// Get the current items
+$groupedEntries = [];
+
+foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $item) {
+    if ($item['transaction_id'] === $_GET['transaction_id']) {
+        $date = $item['date'];
+            if (!isset($groupedEntries[$date])) {
+                $groupedEntries[$date][] = [];
+                
+}
+    $groupedEntries[$date][] = $item;
+}}
+
+$html = '
+<h4>Cash Flow Statement</h4>
+<h4>'.$row_dept['name'].'</h4> 
+<table class="table" id="request" cellspacing="0">
+       <thead>
+            <tr style="border: 1px solid black;">
+               <th style="border: 1px solid black;background-color:green;color:white;">Date</th>
+               <th style="border: 1px solid black;background-color:green;color:white;">Operating</th>
+               <th style="border: 1px solid black;background-color:green;color:white;">Amount</th>
+               <th style="border: 1px solid black;background-color:green;color:white;">Investing</th>
+               <th style="border: 1px solid black;background-color:green;color:white;">Amount</th>
+               <th style="border: 1px solid black;background-color:green;color:white;">Financing</th>
+               <th style="border: 1px solid black;background-color:green;color:white;">Amount</th>
+               <th style="border: 1px solid black;background-color:green;color:white;">Total</th>
+            </tr>
+         </thead>
+ <tbody>
+';
+
 foreach ($groupedEntries as $date => $items) {
- $filteredArray = array_filter($items);
+   $filteredArray = array_filter($items);
 
- foreach ($filteredArray as $item) {
-    $pdf->Cell(45,10,$date,1,0,'C',0);
- }
+   $html .= '
+   <tr style="background-color: #f2f2f2;">
+   <td style="border: 1px solid black;">'.$date.'</td>
+   ';
+   foreach ($filteredArray as $item) {
 
- foreach ($filteredArray as $item) {
-    $pdf->Cell(50,10,$item['operating_activities_name'],1,0,'C',0);
- }
+    
+     
+      $operating_activities_amount += $item['operating_activities_amount'];
+      $investing_activities_amount +=  $item['investing_activities_amount'];
+      $financing_activities_amount +=  $item['financing_activities_amount'];
+      $total_cash_flow = $operating_activities_amount + $investing_activities_amount + $financing_activities_amount;
 
- foreach ($filteredArray as $item) {
-    $pdf->Cell(30,10,htmlspecialchars(number_format($item['operating_activities_amount'], 2)),1,0,'C',0);
- }
 
- foreach ($filteredArray as $item) {
-    $pdf->Cell(50,10,$item['investing_activities_name'],1,0,'C',0);
- }
+      $html .= '<td style="border: 1px solid black;">'.$item['operating_activities_name'].'</td>';
+      $html .= '<td style="border: 1px solid black;">'.htmlspecialchars(number_format($item['operating_activities_amount'], 2)).'</td>';
+      $html .= '<td style="border: 1px solid black;">'.$item['investing_activities_name'].'</td>';
+      $html .= '<td style="border: 1px solid black;">'.htmlspecialchars(number_format($item['investing_activities_amount'], 2)).'</td>';
+      $html .= '<td style="border: 1px solid black;">'.$item['investing_activities_name'].'</td>';
+      $html .= '<td style="border: 1px solid black;">'.htmlspecialchars(number_format($item['financing_activities_amount'], 2)).'</td>';
+   }
 
- foreach ($filteredArray as $item) {
-    $pdf->Cell(30,10,htmlspecialchars(number_format($item['investing_activities_amount'], 2)),1,0,'C',0);
- }
-
- foreach ($filteredArray as $item) {
-    $pdf->Cell(50,10,$item['financing_activities_name'],1,0,'C',0);
- }
-
- foreach ($filteredArray as $item) {
-    $pdf->Cell(30,10,htmlspecialchars(number_format($item['financing_activities_amount'], 2)),1,0,'C',0);
- }
-
- $operating_activities_amount = 0;
- $investing_activities_amount = 0;
- $financing_activities_amount = 0;
- $total_cash_flow = 0;
-
- $operating_activities_amount += $item['operating_activities_amount'];
- $investing_activities_amount +=  $item['investing_activities_amount'];
- $financing_activities_amount +=  $item['financing_activities_amount'];
- $total_cash_flow = $operating_activities_amount + $investing_activities_amount + $financing_activities_amount;
-
- $pdf->Ln();
- $pdf->Cell(45,10,'Toal Cash Flow: '.htmlspecialchars(number_format($total_cash_flow, 2)),1,0,'C',0);
- $pdf->Cell(50,10,'Total',1,0,'C',0);
- $pdf->Cell(30,10,htmlspecialchars(number_format($operating_activities_amount, 2)),1,0,'C',0);
- $pdf->Cell(50,10,'Total',1,0,'C',0);
- $pdf->Cell(30,10,htmlspecialchars(number_format($investing_activities_amount, 2)),1,0,'C',0);
- $pdf->Cell(50,10,'',1,0,'C',0);
- $pdf->Cell(30,10,htmlspecialchars(number_format($financing_activities_amount, 2)),1,0,'C',0);
- $pdf->Ln();
+   $html .= '</tr>';
 }
 
+$html .= '
+<tfoot>
+<tr style="background-color: green;color:white;">
+<td style="border: 1px solid black;">Total Cash Flow </td>
+<td style="border: 1px solid black;"> </td>
+<td style="border: 1px solid black;">'.htmlspecialchars(number_format($operating_activities_amount, 2)).'</td>
+<td style="border: 1px solid black;"></td>
+<td style="border: 1px solid black;">'.htmlspecialchars(number_format($investing_activities_amount, 2)).'</td>
+<td style="border: 1px solid black;"></td>
+<td style="border: 1px solid black;">'.htmlspecialchars(number_format($financing_activities_amount, 2)).'</td>
+<td style="border: 1px solid black;">'.htmlspecialchars(number_format($total_cash_flow, 2)).'</td>
+</tr>
+</tfoot>';
 
- $pdf->Output('Cash_Flow_Statement_data.pdf','D', true);
+$html .= ' </tbody> </table>';
+
+$pdf->writeHTML($html, true, false, false, false, '');
+ $pdf->Output('Cash_Flow_Statement_data.pdf','I');
 
 ?>

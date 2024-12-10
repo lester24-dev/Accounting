@@ -15,8 +15,8 @@ error_reporting(0);
                     ?>
                     <h4 class="card-title">Name: <?php echo $row_depts['name'] ?></h4>
                     <h4 class="card-title">Journal Entries</h4>
-                  <a href="journal_data_pdf?transaction_id=<?php echo $_GET['transaction_id']; ?>" class="btn btn-danger">PDF</a>
-                  </p>
+                    <a href="journal_data_pdf?transaction_id=<?php echo $_GET['transaction_id']; ?>" class="btn btn-danger">PDF</a>
+                </p>
                   <div class="table-responsive">
                     <table class="table" id="request" cellspacing="0">
                       <thead>

@@ -21,7 +21,7 @@ $total_balance_equity = 0;
                     ?>
                     <h4 class="card-title">Name: <?php echo $row_depts['name'] ?></h4>
                     <h4 class="card-title">Income Statement</h4>
-                  <a href="financial_statement_data_pdf?transaction_id=<?php echo $_GET['transaction_id'] ?>" class="btn btn-danger">PDF</a>
+                  <a href="financial_statement_data_pdf?transaction_id=<?php echo $_GET['transaction_id'] ?>&id=<?php echo $_GET['customer_id']  ?>" class="btn btn-danger">PDF</a>
                   </p>
                   <div class="table-responsive">
                     <table class="table" id="request" cellspacing="0">
@@ -247,7 +247,7 @@ $total_balance_equity = 0;
                     ?>
                   <h4 class="card-title">Name: <?php echo $row_depts['name'] ?></h4>
                   <h4 class="card-title">Balance Sheet</h4>
-                  <a href="balance_sheet_data_pdf?transaction_id=<?php echo $_GET['transaction_id'] ?>" class="btn btn-danger">PDF</a>
+                  <a href="balance_sheet_data_pdf?transaction_id=<?php echo $_GET['transaction_id'] ?>&id=<?php echo $_GET['customer_id'] ?>" class="btn btn-danger">PDF</a>
                   </p>
                   <div class="table-responsive">
 
@@ -603,7 +603,7 @@ $total_balance_equity = 0;
                             </td>
                           </tr>
 
-                          <tr>
+                          <!-- <tr>
                             <td>Expanded Withholding Tax</td>
                             <td>
                               <?php 
@@ -614,7 +614,7 @@ $total_balance_equity = 0;
 
                               ?>
                             </td>
-                          </tr>
+                          </tr> -->
 
                           <tr>
                             <td>Income Tax</td>
