@@ -42,7 +42,7 @@ include('../layout/nav_header.php');
                     labels = data.map(item => item.seriesName); // Use one set of labels for all
                   
                     datasets.push({
-                        label: `${seriesData} - Forecast`,
+                        label: `${seriesName} - Forecast`,
                         data: forecastValues,
                         borderColor: getRandomColor(),
                         backgroundColor: 'rgba(255, 0, 0, 0.1)',

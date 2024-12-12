@@ -141,8 +141,8 @@ error_reporting(0);
             <input type="hidden" name="staff_id" value="<?php echo $_SESSION['id']?>">
         </div>
 
-        <div class="form-group">
-              <input type="text" class="form-control" id="rq_number" name="rq_number" placeholder="Number of Data:" required>
+        <div class="form-group" style="display:none" id="rq_numbers">
+              <input type="text" class="form-control" id="rq_number" name="rq_number" placeholder="Number of Data:">
         </div>
 
 
@@ -177,8 +177,18 @@ error_reporting(0);
                                
             </select>
         </div>
+
+        <div class="form-group">
+              <select name="excel_answer" id="excel_answer" class="form-control" required>
+                       <option value="">Need Import CSV File ?</option>
+                       <option value="Yes">Yes</option>
+                       <option value="No">No</option>
+            </select>
+        </div>
            
-        
+        <div class="form-group" id="csvFiles" style="display:none;">
+             <input type="file" name="csvFile" id="csvFile" accept=".csv,.xlsx " class="form-control">
+        </div>
    
 
         <!-- <div class="form-group">
@@ -198,3 +208,24 @@ error_reporting(0);
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+  
+const rq_numbers = document.getElementById('rq_numbers');
+const excel_answer = document.getElementById('excel_answer');
+const csvFiles = document.getElementById('csvFiles');
+
+  excel_answer.addEventListener('change', () => {
+    const selectedValue  = excel_answer.value;
+    console.log(selectedValue);
+
+  if (excel_answer.value == 'Yes') {
+    csvFiles.style.display = 'block';
+    rq_numbers.style.display = 'none';
+  } 
+  else{
+    csvFiles.style.display = 'none';
+    rq_numbers.style.display = 'block';
+  }
+});
+</script>

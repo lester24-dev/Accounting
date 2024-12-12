@@ -88,7 +88,7 @@ include('../layout/admin_nav_header.php');
                         <script>
                             $(document).ready(function() {
                                 $('#request').DataTable({
-                                  ordering: false
+                                  // ordering: false
                                  });
                             });
                         </script>

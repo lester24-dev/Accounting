@@ -1,4 +1,7 @@
 <?php
+require '../vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet; 
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx; 
 session_start();
 try {
 	$dbh = new PDO('mysql:host=localhost;dbname=gcm;charset=utf8mb4','root','');
@@ -70,6 +73,7 @@ if (isset($_POST['register'])) {
 		$profile_img = $_FILES['profile_img']['name'];
 		$profile_img_tmp_name = $_FILES['profile_img']['tmp_name'];
 		$image = $_FILES['profile_img'];
+		$confirm_password = $_POST['confirm_password'];
 		
 	     move_uploaded_file($profile_img_tmp_name,"../uploads/$profile_img");
 		
@@ -105,10 +109,17 @@ if (isset($_POST['register'])) {
 				'timestamp'    => date("M-d-Y"),
 				];
 
-				if ($stmt->execute($data)) {
-					echo '<script>alert("Department Account Create")</script>';
-           			 echo '<script>window.location.href="../admin/department"</script>';
+				if ($password === $confirm_password) {
+					if ($stmt->execute($data)) {
+						echo '<script>alert("Department Account Create")</script>';
+						echo '<script>window.location.href="../admin/department"</script>';
+					}
 				}
+				else {
+					echo '<script>alert("Passwords do not match. Please try again")</script>';
+					echo '<script>window.location.href="../admin/department"</script>';
+				}
+				
 			
 		 }
 
@@ -144,8 +155,14 @@ if (isset($_POST['register'])) {
 			VALUES (:bir, :customer_dept, :department, :dti, :email, :mayors_permit, :name, :password, :profile_img, :sec, :timestamp, :username)";
 			$stmt = $dbh->prepare($sql);
 
-			if ($stmt->execute($data)) {
-				echo '<script>alert("Department Account Create")</script>';
+			if ($password === $confirm_password) {
+				if ($stmt->execute($data)) {
+					echo '<script>alert("Department Account Create")</script>';
+					echo '<script>window.location.href="../admin/department"</script>';
+				}
+			}
+			else {
+				echo '<script>alert("Passwords do not match. Please try again")</script>';
 				echo '<script>window.location.href="../admin/department"</script>';
 			}
 
@@ -185,8 +202,14 @@ if (isset($_POST['register'])) {
 			VALUES (:bir, :customer_dept, :department, :dti, :email, :mayors_permit, :name, :password, :profile_img, :sec, :timestamp, :username)";
 			$stmt = $dbh->prepare($sql);
 
-			if ($stmt->execute($data)) {
-				echo '<script>alert("Department Account Create")</script>';
+			if ($password === $confirm_password) {
+				if ($stmt->execute($data)) {
+					echo '<script>alert("Department Account Create")</script>';
+					echo '<script>window.location.href="../admin/department"</script>';
+				}
+			}
+			else {
+				echo '<script>alert("Passwords do not match. Please try again")</script>';
 				echo '<script>window.location.href="../admin/department"</script>';
 			}
 		 }
@@ -210,8 +233,14 @@ if (isset($_POST['register'])) {
 				VALUES (:bir, :customer_dept, :department, :dti, :email, :mayors_permit, :name, :password, :profile_img, :sec, :timestamp, :username)";
 				$stmt = $dbh->prepare($sql);
 
-				if ($stmt->execute($data)) {
-					echo '<script>alert("Department Account Create")</script>';
+				if ($password === $confirm_password) {
+					if ($stmt->execute($data)) {
+						echo '<script>alert("Department Account Create")</script>';
+						echo '<script>window.location.href="../admin/department"</script>';
+					}
+				}
+				else {
+					echo '<script>alert("Passwords do not match. Please try again")</script>';
 					echo '<script>window.location.href="../admin/department"</script>';
 				}
 		 }
@@ -503,55 +532,148 @@ if (isset($_POST['create_sales_forecast_staff'])) {
     $customer_id = $_POST['customer_id'];
     $creation = $_SESSION['id'];
     $year  = $_POST['year'];
-    $rq_number = $_POST['rq_number'];
+	$future_sales = 0;
 
-    $data = [
-        "title" => $title,
-        "staff_id" => $staff_id,
-        "creation" => $creation,
-        "customer_id" => $customer_id,
-        "transaction_id" => $transaction_id,
-        "year" => $year,
-        "status" => "Pending",
-        "dates"    => date('Y-m-d')
-
-    ];
-
-    $data_admin_notif = [
-        'title'  => 'New transaction has been created by '. $_SESSION['name'] . ' and the id is ' .$transaction_id ,
-        'department_id' => $customer_id,
-        'request_id'    => $transaction_id,
-        'status'        => 'unseen',
-        'type'        => 'journal',
-        'profile_img'  => $_SESSION['profile_img']
-    ];
-
-    $data_dept_notif = [
-        'title'  => 'New transaction has been created by '. $_SESSION['name']. ' and the id is ' .$transaction_id,
-        'department_id' => $customer_id,
-        'request_id'    => $transaction_id,
-        'status'        => 'unseen',
-		'type'        => 'sale',
-        'profile_img'  => $_SESSION['profile_img']
-    ];
-
-	$sql_sale = "INSERT INTO `sale-forecast` (`creation`, `customer_id`, `dates`, `staff_id`, `status`, `title`, `transaction_id`, `year`) 
-	VALUES (:creation, :customer_id, :dates, :staff_id, :status, :title, :transaction_id, :year)";
-	$stmt_sale = $dbh->prepare($sql_sale);
-	$stmt_sale->execute($data);
-
-	$sql_dept_notif = "INSERT INTO `department_notification` ( `department_id`, `profile_img`, `request_id`, `status`, `title`, `type`) 
-			VALUES (:department_id, :profile_img, :request_id, :status, :title, :type)";
-	$stmt_dept_notif = $dbh->prepare($sql_dept_notif);
-	$stmt_dept_notif->execute($data_dept_notif);
-
-	$sql_admin_notif = "INSERT INTO `department_notification` ( `department_id`, `profile_img`, `request_id`, `status`, `title`, `type`) 
-			VALUES (:department_id, :profile_img, :request_id, :status, :title, :type)";
-	$stmt_admin_notif = $dbh->prepare($sql_admin_notif);
-	$stmt_admin_notif->execute($data_admin_notif);
+	if (isset($_FILES['csvFile']) && $_POST['excel_answer'] == 'Yes') {
+		$data = [
+			"title" => $title,
+			"staff_id" => $staff_id,
+			"creation" => $creation,
+			"customer_id" => $customer_id,
+			"transaction_id" => $transaction_id,
+			"year" => $year,
+			"status" => "Pending",
+			"dates"    => date('Y-m-d')
 	
-	$url = '../staff/sale_forecast_create?rq_number='.$rq_number.'&transaction_id='.$transaction_id.'&year='.$year.'&data_number='.$_POST['data_number'].'&customer_id='.$_POST['customer_id'].'&title='.$title;
-    header('Location:'.$url);
+		];
+	
+		$data_admin_notif = [
+			'title'  => 'New transaction has been created by '. $_SESSION['name'] . ' and the id is ' .$transaction_id ,
+			'department_id' => $customer_id,
+			'request_id'    => $transaction_id,
+			'status'        => 'unseen',
+			'type'        => 'journal',
+			'profile_img'  => $_SESSION['profile_img']
+		];
+	
+		$data_dept_notif = [
+			'title'  => 'New transaction has been created by '. $_SESSION['name']. ' and the id is ' .$transaction_id,
+			'department_id' => $customer_id,
+			'request_id'    => $transaction_id,
+			'status'        => 'unseen',
+			'type'        => 'sale',
+			'profile_img'  => $_SESSION['profile_img']
+		];
+	
+		$sql_sale = "INSERT INTO `sale-forecast` (`creation`, `customer_id`, `dates`, `staff_id`, `status`, `title`, `transaction_id`, `year`) 
+		VALUES (:creation, :customer_id, :dates, :staff_id, :status, :title, :transaction_id, :year)";
+		$stmt_sale = $dbh->prepare($sql_sale);
+		$stmt_sale->execute($data);
+	
+		$sql_dept_notif = "INSERT INTO `department_notification` ( `department_id`, `profile_img`, `request_id`, `status`, `title`, `type`) 
+				VALUES (:department_id, :profile_img, :request_id, :status, :title, :type)";
+		$stmt_dept_notif = $dbh->prepare($sql_dept_notif);
+		$stmt_dept_notif->execute($data_dept_notif);
+	
+		$sql_admin_notif = "INSERT INTO `department_notification` ( `department_id`, `profile_img`, `request_id`, `status`, `title`, `type`) 
+				VALUES (:department_id, :profile_img, :request_id, :status, :title, :type)";
+		$stmt_admin_notif = $dbh->prepare($sql_admin_notif);
+		$stmt_admin_notif->execute($data_admin_notif);
+
+
+		$spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($_FILES['csvFile']['tmp_name']); 
+		$worksheet = $spreadsheet->getActiveSheet();  
+		$worksheet_arr = $worksheet->toArray(); 
+
+
+		$fileName = $_FILES["csvFile"]["name"];
+		$fileExtension = explode('.', $fileName);
+      	$fileExtension = strtolower(end($fileExtension));
+		$newFileName = date("Y.m.d") . " - " . date("h.i.sa") . "." . $fileExtension;
+		$targetDirectory = "../csv/" . $newFileName;
+		move_uploaded_file($_FILES['csvFile']['tmp_name'], $targetDirectory);
+
+		 // Remove header row 
+		 unset($worksheet_arr[0]); 
+
+		foreach ($worksheet_arr as $key => $value) {
+				$firstValue = (float)$value[1];
+				$lastValue = (float)$value[1];
+				
+				$year_forecast = $value[0] + 1 ;
+				$years = count($worksheet_arr) - 1;
+				$agr = pow($lastValue / $firstValue, 1 / $years) - 1;
+				// Predict future sales for 5 years
+				$current_sales = $lastValue;
+				$future_years = 5;
+				$future_sales += $current_sales * pow(1 + $agr, $future_years);
+				$future = round($future_sales, 2);
+	
+				$sql_sale = "INSERT INTO `time_series_forecasts` (`date`, `original_value`, `forecast_value`, `seriesName`, `transaction_id`) 
+				VALUES (:date, :original_value, :forecast_value, :seriesName, :transaction_id)";
+				$stmt_sale = $dbh->prepare($sql_sale);
+				$stmt_sale->bindParam(':date', $value[0]);
+				$stmt_sale->bindParam(':original_value', $value[1]);
+				$stmt_sale->bindParam(':seriesName', $year_forecast);
+				$stmt_sale->bindParam(':forecast_value', $future);
+				$stmt_sale->bindParam(':transaction_id', $transaction_id);
+				$stmt_sale->execute();
+		}
+		$url = '../staff/sales_forecast_data?transaction_id='.$transaction_id.'&customer_id='.$_POST['customer_id'].'&title='.$title;
+		header('Location:'.$url);
+	}
+	else {
+		$rq_number = $_POST['rq_number'];
+		$data = [
+			"title" => $title,
+			"staff_id" => $staff_id,
+			"creation" => $creation,
+			"customer_id" => $customer_id,
+			"transaction_id" => $transaction_id,
+			"year" => $year,
+			"status" => "Pending",
+			"dates"    => date('Y-m-d')
+	
+		];
+	
+		$data_admin_notif = [
+			'title'  => 'New transaction has been created by '. $_SESSION['name'] . ' and the id is ' .$transaction_id ,
+			'department_id' => $customer_id,
+			'request_id'    => $transaction_id,
+			'status'        => 'unseen',
+			'type'        => 'journal',
+			'profile_img'  => $_SESSION['profile_img']
+		];
+	
+		$data_dept_notif = [
+			'title'  => 'New transaction has been created by '. $_SESSION['name']. ' and the id is ' .$transaction_id,
+			'department_id' => $customer_id,
+			'request_id'    => $transaction_id,
+			'status'        => 'unseen',
+			'type'        => 'sale',
+			'profile_img'  => $_SESSION['profile_img']
+		];
+	
+		$sql_sale = "INSERT INTO `sale-forecast` (`creation`, `customer_id`, `dates`, `staff_id`, `status`, `title`, `transaction_id`, `year`) 
+		VALUES (:creation, :customer_id, :dates, :staff_id, :status, :title, :transaction_id, :year)";
+		$stmt_sale = $dbh->prepare($sql_sale);
+		$stmt_sale->execute($data);
+	
+		$sql_dept_notif = "INSERT INTO `department_notification` ( `department_id`, `profile_img`, `request_id`, `status`, `title`, `type`) 
+				VALUES (:department_id, :profile_img, :request_id, :status, :title, :type)";
+		$stmt_dept_notif = $dbh->prepare($sql_dept_notif);
+		$stmt_dept_notif->execute($data_dept_notif);
+	
+		$sql_admin_notif = "INSERT INTO `department_notification` ( `department_id`, `profile_img`, `request_id`, `status`, `title`, `type`) 
+				VALUES (:department_id, :profile_img, :request_id, :status, :title, :type)";
+		$stmt_admin_notif = $dbh->prepare($sql_admin_notif);
+		$stmt_admin_notif->execute($data_admin_notif);
+		
+		$url = '../staff/sale_forecast_create?rq_number='.$rq_number.'&transaction_id='.$transaction_id.'&year='.$year.'&data_number='.$_POST['data_number'].'&customer_id='.$_POST['customer_id'].'&title='.$title;
+		header('Location:'.$url);
+	}
+
+   
 }
 
 // Moving Average Forecast Function
@@ -591,7 +713,7 @@ if (isset($_POST['create_request_forecast_staff'])) {
 			// $sum += $_POST['forecast_value'][$key];
 			$starting_value = $_POST['forecast_value'][0];
 			$ending_value = end($_POST['forecast_value']);
-			$years = $_POST['year'][$key] - 1;
+			$years = count($_POST['year']) - 1;
 			$agr = pow($ending_value / $starting_value, 1 / $years) - 1;
 			// Predict future sales for 5 years
 			$current_sales = end($_POST['forecast_value']);
@@ -618,6 +740,8 @@ if (isset($_POST['create_request_forecast_staff'])) {
 	header('Location:'.$url);
     }
 }
+
+
 
 
 if (isset($_POST['create_ewt'])) {

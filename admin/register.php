@@ -39,6 +39,9 @@ include('../layout/admin_nav_header.php')
                 <div class="form-group">
                   <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" name="password" placeholder="Password" required>
                 </div>
+                <div class="form-group">
+                  <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" name="confirm_password" placeholder="Confirm Password" required>
+                </div>
                 <div class="form-group" >
                   <label for="" style="font-size:15px;">Profile Picture</label>
                   <input type="file" class="form-control form-control-lg" name="profile_img" id="profile_img" accept="image/*" >

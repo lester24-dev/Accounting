@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "datatables.net": "^1.13.1",
-    "datatables.net-dt": "^1.13.1",
-    "firebase": "^9.23.0",
-    "lightbox2": "^2.11.3"
-  }
-}
