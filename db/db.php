@@ -73,6 +73,7 @@ if (isset($_POST['register'])) {
 		$profile_img = $_FILES['profile_img']['name'];
 		$profile_img_tmp_name = $_FILES['profile_img']['tmp_name'];
 		$image = $_FILES['profile_img'];
+		$password = $_POST['password'];
 		$confirm_password = $_POST['confirm_password'];
 		
 	     move_uploaded_file($profile_img_tmp_name,"../uploads/$profile_img");
