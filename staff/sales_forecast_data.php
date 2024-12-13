@@ -34,15 +34,16 @@ include('../layout/nav_header.php');
                 let labels = [];
 
                 // Process each time series
-                Object.keys(data).forEach(seriesName => {
+                data.forEach(seriesName => {
                     const seriesData = data.map(item => item.seriesName);
                     const originalValues = data.map(item => item.original_value);
                     const forecastValues = data.map(item => item.forecast_value);
 
                     labels = data.map(item => item.seriesName); // Use one set of labels for all
-                  
+
+
                     datasets.push({
-                        label: `${seriesName} - Forecast`,
+                        label: `${seriesName.seriesName} - Year`,
                         data: forecastValues,
                         borderColor: getRandomColor(),
                         backgroundColor: 'rgba(255, 0, 0, 0.1)',

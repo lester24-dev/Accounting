@@ -35,7 +35,7 @@ error_reporting(0);
                 let labels = [];
 
                 // Process each time series
-                Object.keys(data).forEach(seriesName => {
+                data.forEach(seriesName => {
                     const seriesData = data.map(item => item.seriesName);
                     const originalValues = data.map(item => item.original_value);
                     const forecastValues = data.map(item => item.forecast_value);
@@ -44,7 +44,7 @@ error_reporting(0);
 
 
                     datasets.push({
-                        label: `${seriesName} - Year`,
+                        label: `${seriesName.seriesName} - Year`,
                         data: forecastValues,
                         borderColor: getRandomColor(),
                         backgroundColor: 'rgba(255, 0, 0, 0.1)',
