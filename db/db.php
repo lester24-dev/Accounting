@@ -110,7 +110,7 @@ if (isset($_POST['register'])) {
 				'timestamp'    => date("M-d-Y"),
 				];
 
-				if ($password === $confirm_password) {
+				if ($password == $confirm_password) {
 					if ($stmt->execute($data)) {
 						echo '<script>alert("Department Account Create")</script>';
 						echo '<script>window.location.href="../admin/department"</script>';
@@ -118,7 +118,7 @@ if (isset($_POST['register'])) {
 				}
 				else {
 					echo '<script>alert("Passwords do not match. Please try again")</script>';
-					echo '<script>window.location.href="../admin/department"</script>';
+					echo '<script>window.location.href="../admin/register"</script>';
 				}
 				
 			
@@ -156,7 +156,7 @@ if (isset($_POST['register'])) {
 			VALUES (:bir, :customer_dept, :department, :dti, :email, :mayors_permit, :name, :password, :profile_img, :sec, :timestamp, :username)";
 			$stmt = $dbh->prepare($sql);
 
-			if ($password === $confirm_password) {
+			if ($password == $confirm_password) {
 				if ($stmt->execute($data)) {
 					echo '<script>alert("Department Account Create")</script>';
 					echo '<script>window.location.href="../admin/department"</script>';
@@ -164,7 +164,7 @@ if (isset($_POST['register'])) {
 			}
 			else {
 				echo '<script>alert("Passwords do not match. Please try again")</script>';
-				echo '<script>window.location.href="../admin/department"</script>';
+				echo '<script>window.location.href="../admin/register"</script>';
 			}
 
 		 }
@@ -203,7 +203,7 @@ if (isset($_POST['register'])) {
 			VALUES (:bir, :customer_dept, :department, :dti, :email, :mayors_permit, :name, :password, :profile_img, :sec, :timestamp, :username)";
 			$stmt = $dbh->prepare($sql);
 
-			if ($password === $confirm_password) {
+			if ($password == $confirm_password) {
 				if ($stmt->execute($data)) {
 					echo '<script>alert("Department Account Create")</script>';
 					echo '<script>window.location.href="../admin/department"</script>';
@@ -211,7 +211,7 @@ if (isset($_POST['register'])) {
 			}
 			else {
 				echo '<script>alert("Passwords do not match. Please try again")</script>';
-				echo '<script>window.location.href="../admin/department"</script>';
+				echo '<script>window.location.href="../admin/register"</script>';
 			}
 		 }
 		 else {
@@ -234,7 +234,7 @@ if (isset($_POST['register'])) {
 				VALUES (:bir, :customer_dept, :department, :dti, :email, :mayors_permit, :name, :password, :profile_img, :sec, :timestamp, :username)";
 				$stmt = $dbh->prepare($sql);
 
-				if ($password === $confirm_password) {
+				if ($password == $confirm_password) {
 					if ($stmt->execute($data)) {
 						echo '<script>alert("Department Account Create")</script>';
 						echo '<script>window.location.href="../admin/department"</script>';
@@ -242,7 +242,7 @@ if (isset($_POST['register'])) {
 				}
 				else {
 					echo '<script>alert("Passwords do not match. Please try again")</script>';
-					echo '<script>window.location.href="../admin/department"</script>';
+					echo '<script>window.location.href="../admin/register"</script>';
 				}
 		 }
 	}
