@@ -95,8 +95,8 @@ $row_dept = $userRef->fetch(PDO::FETCH_ASSOC);
                      </tbody>
                      </table>';
 
-   $pdf->writeHTML($html, true, false, false, false, '');
-
+$pdf->setFooterDetails('GCM Accounting Admin', $row_dept['name']);
+$pdf->writeHTML($html, true, false, false, false, '');
  $pdf->Output('Ledger_data.pdf','I');
 
 ?>

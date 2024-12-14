@@ -11,6 +11,7 @@
  $total_balance_revenue = 0;
  $total_balance_expenses  = 0;
  $total_balance_expense = 0;
+ $cleaned_number_total_revenue = 0;
 
  $itemsRef_revenue = $dbh->query("SELECT * FROM `account` WHERE account_type = 'Revenues'");
                       foreach ($itemsRef_revenue->fetchAll(PDO::FETCH_ASSOC) as $value) {
@@ -215,6 +216,7 @@ $html .= '
     ';
   $html .= '</table>';
 
+  $pdf->setFooterDetails('GCM Accounting Admin', $row_dept['name']);
   $pdf->writeHTML($html, true, false, false, false, '');
   $pdf->Output('Income_Statement.pdf','I');
 

@@ -112,6 +112,7 @@ $html = '
         </tbody>
      </table>';
  
+$pdf->setFooterDetails('GCM Accounting Admin', $row_dept['name']);
 $pdf->writeHTML($html, true, false, false, false, '');
  $pdf->Output('Trial_data.pdf','I');
 

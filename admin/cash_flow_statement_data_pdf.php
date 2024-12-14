@@ -95,6 +95,7 @@ $html .= '
 
 $html .= ' </tbody> </table>';
 
+$pdf->setFooterDetails('GCM Accounting Admin', $row_dept['name']);
 $pdf->writeHTML($html, true, false, false, false, '');
  $pdf->Output('Cash_Flow_Statement_data.pdf','I');
 

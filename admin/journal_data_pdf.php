@@ -78,7 +78,8 @@ $row_dept = $userRef->fetch(PDO::FETCH_ASSOC);
                      $html .= '
                      </tbody>
                      </table>';
-
+  
+   $pdf->setFooterDetails('GCM Accounting Admin', $row_dept['name']);
    $pdf->writeHTML($html, true, false, false, false, '');
 
  $pdf->Output('Journal_data.pdf','I');

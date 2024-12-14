@@ -286,7 +286,8 @@ $html .= '
     </tbody>
     ';
   $html .= '</table>';
-   
+
+$pdf->setFooterDetails('GCM Accounting Admin', $row_dept['name']);
 $pdf->writeHTML($html, true, false, false, false, '');
 
   $pdf->Output('Balance _Sheet.pdf','I');
