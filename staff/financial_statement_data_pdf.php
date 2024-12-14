@@ -1,5 +1,5 @@
 <?php
- require_once '../tcpdf/tcpdf.php';
+ require_once '../vendor/tecnickcom/tcpdf/tcpdf.php';
  require_once '../db/db.php';
  
 
@@ -215,7 +215,7 @@ $html .= '
     </tbody>
     ';
   $html .= '</table>';
-  
+
   $pdf->setFooterDetails('GCM Accounting Admin', $row_dept['name']);
   $pdf->writeHTML($html, true, false, false, false, '');
   $pdf->Output('Income_Statement.pdf','I');
