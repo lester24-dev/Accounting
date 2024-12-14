@@ -9,7 +9,7 @@ include('../layout/admin_nav_header.php')
               <div class="card shadow mb-4">
                 <div class="card-body">
                   <h4 class="card-title">Profile</h4>
-                  <form action="../db/db.php" method="POST" enctype="multipart/form-data">
+                  <form action="../db/db.php" method="POST" enctype="multipart/form-data" onsubmit="return validatePasswords()">
 
                   <div class="form-group">
                   <input type="text" class="form-control form-control-lg" name="name" id="exampleInputUsername1" placeholder="Name" required>
@@ -37,10 +37,10 @@ include('../layout/admin_nav_header.php')
                   </select>
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" name="password" placeholder="Password" required>
+                  <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Password" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" name="confirm_password" placeholder="Confirm Password" required>
+                  <input type="password" class="form-control form-control-lg" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
                 </div>
                 <div class="form-group" >
                   <label for="" style="font-size:15px;">Profile Picture</label>
@@ -134,4 +134,15 @@ include('../layout/admin_nav_header.php')
     sec.style.display = 'none';
   }
 });
+
+function validatePasswords() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
 </script>
