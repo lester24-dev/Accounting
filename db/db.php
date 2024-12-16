@@ -323,7 +323,7 @@ if (isset($_POST['create_journal_staff'])) {
         "transaction_id" => $transaction_id,
         "year" => $year,
         "status" => "Pending",
-        "dates"    => date('Y-m-d')
+        "timestamp"    => date('Y-m-d')
 
     ];
 
