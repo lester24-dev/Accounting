@@ -4,6 +4,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx; 
 session_start();
 error_reporting(0);
+
 try {
 	$dbh = new PDO('mysql:host=localhost;dbname=gcm;charset=utf8mb4','root','');
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -12,10 +13,12 @@ try {
 }
 
 
+
+
 if (isset($_POST['login'])) {
 	try {
 		$email = $_POST['email'];
-    $password = $_POST['password'];
+    	$password = $_POST['password'];
 
 	$select = $dbh->query("SELECT * FROM users WHERE email = '$email' AND password = '$password'");
 	$userData = $select->fetch(PDO::FETCH_ASSOC);
@@ -47,7 +50,7 @@ if (isset($_POST['login'])) {
 		$_SESSION['mayors_permit'] = $userData['mayors_permit'];
 		$_SESSION['sec'] = $userData['sec'];
 		echo '<script>window.location.href="../customer/dashboard"</script>';
-	}else{
+	}elseif ($userData['department'] == 'Company Admin'){
 		$_SESSION['id'] = $userData['id'];
 		$_SESSION['name'] = $userData['name'];
 		$_SESSION['email'] = $userData['email'];
@@ -62,6 +65,9 @@ if (isset($_POST['login'])) {
 		$_SESSION['sec'] = $userData['sec'];
 		echo '<script>alert("Login Success")</script>';
 		echo '<script>window.location.href="../admin/dashboard"</script>';
+	}else {
+		echo '<script>alert("Wrong credential")</script>';
+		echo '<script>window.location.href="../login"</script>';
 	}
 	} catch (\Throwable $th) {
 	  throw $th;

@@ -21,6 +21,7 @@ error_reporting(0);
                           <th>Year</th>
                           <th>Created At</th>
                           <th>Client</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -39,7 +40,7 @@ error_reporting(0);
                           <td><?php echo $fetch['year']; ?></td>
                           <td><?php echo $fetch['timestamp']; ?></td>
                           <td><?php echo $row_depts['name']; ?></td>
-
+                          <td><a href="sales_forecast_data?transaction_id=<?php echo $fetch['transaction_id']; ?>&customer_id=<?php echo $row_depts['id'] ?>"><i class="fa-solid fa-link" style="font-size:30px;"></i> </a></td>
                                
                      <?php   }?>
                         

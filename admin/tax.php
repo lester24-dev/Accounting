@@ -56,7 +56,7 @@ error_reporting(0);
                               </div>
 
                               <div class="form-group">
-                                    <input type="text" class="form-control" id="tax_percentage" name="tax_percentage" value="<?php echo $fetch['tax_percentage'];?>" placeholder="Tax Percentage" required>
+                                    <input type="number" class="form-control" id="tax_percentage" name="tax_percentage" value="<?php echo $fetch['tax_percentage'];?>" placeholder="Tax Percentage" required>
                               </div>
 
                               </div>
@@ -113,7 +113,7 @@ error_reporting(0);
         </div>
 
         <div class="form-group">
-              <input type="text" class="form-control" id="tax_percentage" name="tax_percentage" placeholder="Tax Percentage" required>
+              <input type="number" class="form-control" id="tax_percentage" name="tax_percentage" placeholder="Tax Percentage" required>
         </div>
 
         </div>

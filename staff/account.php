@@ -36,8 +36,8 @@ include('../layout/nav_header.php');
                           <td><?php echo $fetch['account_name']; ?></td>
                           <td><?php echo $fetch['account_type']; ?></td>
                           <td>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#supplyModal<?php echo $fetch['account_id']; ?>">Update</button>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<?php echo $fetch['account_id']; ?>">Delete</button>
+                            <i class="fa fa-edit" style="font-size:30px;" data-toggle="modal" data-target="#supplyModal<?php echo $fetch['account_id']; ?>"></i>
+                            <i class="fa fa-trash" style="font-size:30px;" data-toggle="modal" data-target="#deleteModal<?php echo $fetch['account_id']; ?>"></i>
                           </td>
                         </tr>
 

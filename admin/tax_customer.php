@@ -33,7 +33,7 @@ error_reporting(0);
                         <tr>
                           <td><?php echo $fetch['name']; ?></td>
                           <td>
-                          <a href="tax?id=<?php echo $fetch['id']; ?>" class="btn btn-info">View</a>
+                          <a href="tax?id=<?php echo $key; ?>"><i class="fa-solid fa-link" style="font-size:30px;"></i> </a>
                           </td>
                         </tr>
                       

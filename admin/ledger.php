@@ -46,12 +46,13 @@ error_reporting(0);
                           <?php 
                             if ($fetch['status'] == 'Pending') {
                               ?>
-                              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#approvedModal<?php echo $fetch['transaction_id']; ?>">Approved</button>
+                              <i class="fa fa-solid fa-check-to-slot" data-toggle="modal" data-target="#approvedModal<?php echo $fetch['transaction_id']; ?>" style="font-size:30px;"></i>
                             <?php
                             }
                             ?>
-                          <a href="ledger_data?transaction_id=<?php echo $fetch['transaction_id']; ?>&customer_id=<?php echo $row_depts['id'] ?>" class="btn btn-info">View</a>
-                          </td>
+                           <a href="ledger_data?transaction_id=<?php echo $fetch['transaction_id']; ?>&customer_id=<?php echo $row_depts['id'] ?>"><i class="fa-solid fa-link" style="font-size:30px;"></i> </a>
+
+                        </td>
                         </tr>
 
                         <div class="modal fade" id="approvedModal<?php echo $fetch['transaction_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

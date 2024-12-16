@@ -44,9 +44,9 @@ include('../layout/nav_header.php');
                           <td><?php echo $fetch['timestamp']; ?></td>
                           <td><?php echo $row_depts['name']; ?></td>
                           <td>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#supplyModal<?php echo $fetch['transaction_id']; ?>">Update</button>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<?php echo $fetch['transaction_id']; ?>">Delete</button>
-                            <a href="journal-data?transaction_id=<?php echo $fetch['transaction_id']; ?>&customer_id=<?php echo $row_depts['id'] ?>" class="btn btn-info">View</a>
+                            <i class="fa fa-edit" style="font-size:30px;" data-toggle="modal" data-target="#supplyModal<?php echo $fetch['transaction_id']; ?>"></i>
+                            <i class="fa fa-trash" style="font-size:30px;" data-toggle="modal" data-target="#deleteModal<?php echo $fetch['transaction_id']; ?>"></i>
+                            <a href="journal-data?transaction_id=<?php echo $fetch['transaction_id']; ?>&customer_id=<?php echo $row_depts['id'] ?>"><i class="fa-solid fa-link" style="font-size:30px;"></i> </a>
                           </td>
                         </tr>
 

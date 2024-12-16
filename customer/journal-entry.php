@@ -30,7 +30,7 @@ error_reporting(0);
 
                           foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $fetch) {
 
-                            if ($fetch['customer_id'] === $_SESSION['id']) {
+                            if ($fetch['customer_id'] == $_SESSION['id']) {
                               $userRef = $dbh->query("SELECT * FROM users WHERE id = '".$fetch['customer_id']."'");
                               $row_depts = $userRef->fetch(PDO::FETCH_ASSOC);
                         ?>
@@ -39,8 +39,9 @@ error_reporting(0);
                           <td><?php echo $fetch['year']; ?></td>
                           <td><?php echo $fetch['timestamp']; ?></td>
                           <td>
-                          <a href="journal-data?transaction_id=<?php echo $fetch['transaction_id']; ?>&customer_id=<?php echo $row_depts['id'] ?>" class="btn btn-info">View</a>
-                          </td>
+                          <a href="journal-data?transaction_id=<?php echo $fetch['transaction_id']; ?>&customer_id=<?php echo $row_depts['id'] ?>"><i class="fa-solid fa-link" style="font-size:30px;"></i> </a>  
+
+                        </td>
                         </tr>
 
                         

@@ -81,6 +81,10 @@ include('../layout/admin_nav_header.php')
 <script>
   const department = document.getElementById('department');
   const company_type = document.getElementById('customer_dept');
+  const dtis = document.getElementById('dtis');
+  const mayors_permits = document.getElementById('mayors_permit');
+  const birs = document.getElementById('bir');
+  const secs = document.getElementById('sec');
 
   department.addEventListener('change', () => {
   const selectedValue  = department.value;
@@ -90,6 +94,10 @@ include('../layout/admin_nav_header.php')
   } 
   else {
     company_type.style.display = 'none';
+    dtis.style.display = 'none';
+    mayors_permits.style.display = 'none';
+    birs.style.display = 'none';
+    secs.style.display = 'none';
   }
 });
 

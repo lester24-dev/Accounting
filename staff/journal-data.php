@@ -88,9 +88,8 @@ include('../layout/nav_header.php');
                         <?php
                             foreach ($filteredArray as $key => $item) {
                                 ?>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#supplyModal<?php echo $item['id'] ?>">Update</button>
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<?php echo $item['data_id'] ?>">Delete</button> <br> <br>
-                       
+                        <i class="fa fa-edit" style="font-size:30px;" data-toggle="modal" data-target="#supplyModal<?php echo $fetch['id']; ?>"></i>
+                        <i class="fa fa-trash" style="font-size:30px;" data-toggle="modal" data-target="#deleteModal<?php echo $fetch['data_id']; ?>"></i> <br> <br>
                         <div class="modal fade" id="supplyModal<?php echo $item['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                             <div class="modal-content">

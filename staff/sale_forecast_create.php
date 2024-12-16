@@ -41,7 +41,7 @@ error_reporting(0);
 
                         
                          <div class="form-group">
-                            <input type="text" name="forecast_value[]" id="forecast_value" class="form-control">
+                            <input type="number" name="forecast_value[]" id="forecast_value" class="form-control">
                             <input type="hidden" class="form-control" id="i" name="i[]" value="<?php echo $i ?>">
                         </div>
                         

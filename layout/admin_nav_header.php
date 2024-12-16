@@ -29,6 +29,7 @@ $rowCount = $stmt->rowCount();
     <!-- inject:css -->
     <link rel="stylesheet" href="../css/style.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <!-- endinject -->
 </head>
 <body>
@@ -839,7 +840,7 @@ $rowCount = $stmt->rowCount();
           
         <li class="nav-item">
            <a class="nav-link" href="../admin/dashboard">
-             <i class="icon-box menu-icon"></i>
+             <i class="fa fa-home menu-icon"></i>
              <span class="menu-title">Dashboard</span>
            </a>
          </li>
@@ -853,70 +854,70 @@ $rowCount = $stmt->rowCount();
 
          <li class="nav-item">
             <a class="nav-link" href="../admin/account">
-              <i class="icon-command menu-icon"></i>
+              <i class="fa fa-table menu-icon"></i>
               <span class="menu-title">Account Table</span>
             </a>
           </li>
 
          <li class="nav-item">
            <a class="nav-link" href="../admin/journal-entry">
-             <i class="icon-command menu-icon"></i>
+             <i class="fa fa-j menu-icon"></i>
              <span class="menu-title">Journal Entries</span>
            </a>
          </li>
 
          <li class="nav-item">
            <a class="nav-link" href="../admin/ledger">
-             <i class="icon-command menu-icon"></i>
+             <i class="fa fa-l menu-icon"></i>
              <span class="menu-title">General Ledger</span>
            </a>
          </li>
 
          <li class="nav-item">
            <a class="nav-link" href="../admin/trial">
-             <i class="icon-command menu-icon"></i>
+             <i class="fa fa-t"></i> <i class="fa fa-b menu-icon"></i>
              <span class="menu-title">Trial Balance</span>
            </a>
          </li>
 
          <li class="nav-item">
            <a class="nav-link" href="../admin/cash-flow-statement">
-             <i class="icon-command menu-icon"></i>
+             <i class="fa fa-c menu-icon"></i>
              <span class="menu-title">Cash Flow Statement</span>
            </a>
          </li>
 
           <li class="nav-item">
            <a class="nav-link" href="../admin/financial">
-             <i class="icon-command menu-icon"></i>
+             <i class="fa fa-f menu-icon"></i>
              <span class="menu-title">Financial Statement</span>
            </a>
          </li>
 
          <li class="nav-item">
            <a class="nav-link" href="../admin/sales_forecast">
-             <i class="icon-command menu-icon"></i>
+             <i class="fa fa-chart-line menu-icon"></i>
              <span class="menu-title">Sales Forecast</span>
            </a>
          </li>
 
          <li class="nav-item">
            <a class="nav-link" href="../admin/bir">
-             <i class="icon-command menu-icon"></i>
+             <i class="fa fa-b menu-icon"></i>
              <span class="menu-title">BIR Form</span>
            </a>
          </li>
 
          <li class="nav-item">
            <a class="nav-link" href="../admin/tax_customer">
-             <i class="icon-command menu-icon"></i>
+             <i class="fa fa-t menu-icon"></i>
              <span class="menu-title">Tax</span>
            </a>
          </li>
 
          <li class="nav-item">
            <a class="nav-link" href="../admin/ewt">
-             <i class="icon-command menu-icon"></i>
+             <i class="fa fa-e menu-icon"></i>
              <span class="menu-title">EWT</span>
            </a>
          </li>

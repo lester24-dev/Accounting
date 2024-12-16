@@ -30,7 +30,7 @@ error_reporting(0);
                           $stmt = $dbh->query("SELECT * FROM `cash-flow-statement`");
                           foreach($stmt->fetchAll(PDO::FETCH_ASSOC) as $fetch) {
 
-                            if ($fetch['staff_id'] == $_SESSION['id']) {
+                            if ($fetch['customer_id'] == $_SESSION['id']) {
 
                               $userRef = $dbh->query("SELECT * FROM users WHERE id = '".$fetch['customer_id']."'");
                               $row_depts = $userRef->fetch(PDO::FETCH_ASSOC);
@@ -41,8 +41,7 @@ error_reporting(0);
                           <td><?php echo $fetch['timestamp']; ?></td>
                           <td><?php echo $row_depts['name']; ?></td>
                           <td>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#supplyModal<?php echo $fetch['transaction_id']; ?>">Update</button>
-                            <a href="cash-flow-statement-data?transaction_id=<?php echo $fetch['transaction_id']; ?>&customer_id=<?php echo $row_depts['id'] ?>" class="btn btn-info">View</a>
+                            <a href="cash-flow-statement-data?transaction_id=<?php echo $fetch['transaction_id']; ?>&customer_id=<?php echo $row_depts['id'] ?>"><i class="fa-solid fa-link" style="font-size:30px;"></i> </a>    
                           </td>
                         </tr>
 
