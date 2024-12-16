@@ -553,7 +553,6 @@ $total_balance_equity = 0;
             $tax_value_pt = 0;
             $tax_value_ewt = 0;
             $tax_value_it = 0;
-
             $financialRef = $dbh->query("SELECT * FROM `financial-statement` WHERE transaction_id = '".$_GET['transaction_id']."'");
             $financialRef_depts = $financialRef->fetch(PDO::FETCH_ASSOC);
 
@@ -589,7 +588,7 @@ $total_balance_equity = 0;
             <tbody>
 
                         <tr>
-                            <td>Percentage Tax</td>
+                            <td>Percentage Tax (<?php echo ('(total revenue) '. $cleaned_number_total_revenue .' x '. $tax_value_it . ' (percentage tax rate)')  ?>)</td>
                             <td>
                               <?php 
                                 $characters = array(',', ' ', '-');
@@ -601,7 +600,7 @@ $total_balance_equity = 0;
                             </td>
                           </tr>
 
-                          <tr>
+                          <!-- <tr>
                             <td>Expanded Withholding Tax</td>
                             <td>
                               <?php 
@@ -612,10 +611,10 @@ $total_balance_equity = 0;
 
                               ?>
                             </td>
-                          </tr>
+                          </tr> -->
 
                           <tr>
-                            <td>Income Tax</td>
+                            <td>Income Tax (<?php echo ('(total revenue) '. $cleaned_number_total_revenue .' x '. $tax_value_it . ' (income tax rate)')  ?>)</td>
                             <td>
                               <?php 
                                 $characters = array(',', ' ', '-');

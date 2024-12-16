@@ -3,6 +3,7 @@ require '../vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet; 
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx; 
 session_start();
+error_reporting(0);
 try {
 	$dbh = new PDO('mysql:host=localhost;dbname=gcm;charset=utf8mb4','root','');
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

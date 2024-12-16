@@ -591,7 +591,7 @@ $creation_id = 0;
             <tbody>
 
                         <tr>
-                            <td>Percentage Tax</td>
+                            <td>Percentage Tax (<?php echo ('(total revenue) '. $cleaned_number_total_revenue .' x '. $tax_value_it . ' (percentage tax rate)')  ?>)</td>
                             <td>
                               <?php 
                                 $characters = array(',', ' ', '-');
@@ -603,7 +603,7 @@ $creation_id = 0;
                             </td>
                           </tr>
 
-                          <tr>
+                          <!-- <tr>
                             <td>Expanded Withholding Tax</td>
                             <td>
                               <?php 
@@ -614,10 +614,10 @@ $creation_id = 0;
 
                               ?>
                             </td>
-                          </tr>
+                          </tr> -->
 
                           <tr>
-                            <td>Income Tax</td>
+                            <td>Income Tax (<?php echo ('(total revenue) '. $cleaned_number_total_revenue .' x '. $tax_value_it . ' (income tax rate)')  ?>)</td>
                             <td>
                               <?php 
                                 $characters = array(',', ' ', '-');

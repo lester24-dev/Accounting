@@ -215,6 +215,7 @@ include('../layout/nav_header.php');
                            
 
                             <div class="modal-footer">
+                                <button type="button" class="btn btn-block btn-success btn-lg font-weight-medium auth-form-btn" data-toggle="modal" data-target="#exampleModal">Tax Computation</button>
                                 <button type="submit" class="btn btn-block btn-info btn-lg font-weight-medium auth-form-btn" name="create_request_journal_staff" style="background-color:#008000;">Create Data</button>
                             </div>
 
@@ -226,6 +227,35 @@ include('../layout/nav_header.php');
                     </div>
    
     </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tax Computation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+      <h5>Percentage Tax</h5>
+      <p>Percentage Tax = Total Revenue * Percentage Tax Rate</p>
+
+      <h5>Income Tax</h5>
+      <p>Income Tax = Total Revenue * Income Tax Rate</p>
+      
+      <h5>Expanded Witholding Tax</h5>
+      <p>Expanded Witholding Tax = Debit Amount (Expanded Witholding Tax Supported) * Expanded Witholding Tax Rate</p>
+
+       
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
